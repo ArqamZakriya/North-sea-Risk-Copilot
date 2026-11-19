@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.DS_Store
+data/raw/json/
+data/raw/*.csv
+data/raw/*.jsonl
+!data/raw/collection_log.csv
