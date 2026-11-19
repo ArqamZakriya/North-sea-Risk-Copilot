@@ -43,9 +43,15 @@ def check(path=cfg.CSV_PATH):
     wave_missing = df.groupby("site")["wave_height"].apply(lambda s: s.isna().mean())
     print("\nMissing wave_height share per site:")
     print(wave_missing.round(4).to_string())
+    by_year = df.assign(miss=df["wave_height"].isna()).groupby(df["time"].dt.year)["miss"].mean()
+    print("\nMissing wave_height share by year (all sites):")
+    print(by_year.round(3).to_string())
     for site, share in wave_missing.items():
-        if share > 0.2:
-            warnings.append(f"{site}: {share:.0%} of wave_height is missing, move the point further offshore")
+        if share > 0.02:
+            warnings.append(
+                f"{site}: {share:.0%} of wave_height is missing. If only this site is affected, "
+                "move the point offshore. If every site is affected, check the year table above."
+            )
 
     dup = df.duplicated(["site", "time"]).sum()
     print("\nDuplicate site/time rows:", dup)

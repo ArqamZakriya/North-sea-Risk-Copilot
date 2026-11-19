@@ -34,6 +34,7 @@ ATM_VARS = (
     "temperature_2m,surface_pressure"
 )
 MAR_VARS = "wave_height,wave_period,wave_direction"
+MAR_MODEL = "era5_ocean"
 
 USER_AGENT = "CS5079-student-project (University of Aberdeen coursework)"
 REQUEST_DELAY_S = 1.5

@@ -49,6 +49,8 @@ def fetch(url, lat, lon, start, end, hourly, atmos):
               "end_date": end, "hourly": hourly, "timezone": "UTC"}
     if atmos:
         params["wind_speed_unit"] = "ms"
+    else:
+        params["models"] = cfg.MAR_MODEL
     last = "no response"
     for k in range(cfg.MAX_RETRIES):
         try:
@@ -66,7 +68,8 @@ def fetch(url, lat, lon, start, end, hourly, atmos):
 def get_block(site, lat, lon, year, kind):
     """Return the raw JSON for one site, year and data kind, from disk or the API."""
     cfg.JSON_DIR.mkdir(parents=True, exist_ok=True)
-    path = cfg.JSON_DIR / f"{site}_{year}_{kind}.json"
+    tag = kind if kind == "atm" else f"{kind}_{cfg.MAR_MODEL}"
+    path = cfg.JSON_DIR / f"{site}_{year}_{tag}.json"
     if path.exists():
         with open(path) as f:
             return json.load(f), False
@@ -122,7 +125,9 @@ def collect(sites=None, first_year=cfg.FIRST_YEAR):
 
 def main():
     """Parse command line options and run the collection."""
-    p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    p = argparse.ArgumentParser(
+        description="Collect hourly weather and sea-state data for North Sea wind sites."
+    )
     p.add_argument("--sites", nargs="*", help="subset of site names from config.SITES")
     p.add_argument("--first-year", type=int, default=cfg.FIRST_YEAR)
     args = p.parse_args()
