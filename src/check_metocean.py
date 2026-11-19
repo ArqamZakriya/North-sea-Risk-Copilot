@@ -73,9 +73,14 @@ def check(path=cfg.CSV_PATH):
     corr = waves.corr()
     print("\nWave height correlation between sites:")
     print(corr.round(3).to_string())
-    for a, b in combinations(corr.columns, 2):
-        if corr.loc[a, b] > 0.97:
-            warnings.append(f"{a} and {b} wave correlation is {corr.loc[a, b]:.3f}, nearly identical")
+    corr_columns = list(corr.columns)
+    corr_values = corr.to_numpy(dtype=float)
+    for i, a in enumerate(corr_columns):
+        for j in range(i + 1, len(corr_columns)):
+            b = corr_columns[j]
+            correlation = corr_values[i, j]
+            if correlation > 0.97:
+                warnings.append(f"{a} and {b} wave correlation is {correlation:.3f}, nearly identical")
 
     print("\nGust speed (m/s) by site, 99th percentile and maximum:")
     print(df.groupby("site")["wind_gusts_10m"].agg(p99=lambda s: s.quantile(0.99), max="max").round(1).to_string())
