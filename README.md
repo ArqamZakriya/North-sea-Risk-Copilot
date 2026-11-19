@@ -1,3 +1,6 @@
+# north-sea-risk-copilot
+North Sea Offshore Operations Risk &amp; Safety Copilot
+
 # North Sea Offshore Operations Risk & Safety Copilot
 
 CS5079 Applied AI, CA1 Task 1 (University of Aberdeen). Forecasts hazardous North Sea working conditions for the next 6 hours and retrieves matching UK HSE and MAIB safety guidance with citations.
