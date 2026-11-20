@@ -16,11 +16,11 @@ LOG_PATH = RAW_DIR / "collection_log.csv"
 SITES = {
     "MorayEast": (58.18, -2.72),
     "EOWDC": (57.22, -1.97),
-    "Seagreen": (56.60, -1.80),
+    "FortiesArea": (57.70, 1.00),
     "Teesside": (54.70, -1.00),
     "DoggerBankA": (54.80, 2.00),
     "HornseaOne": (53.90, 1.80),
-    "Dudgeon": (53.25, 1.40),
+    "BrentArea": (61.00, 1.70),
     "GreaterGabbard": (51.90, 2.00),
 }
 
@@ -40,3 +40,37 @@ USER_AGENT = "CS5079-student-project (University of Aberdeen coursework)"
 REQUEST_DELAY_S = 1.5
 MAX_RETRIES = 5
 TIMEOUT_S = 90
+
+CORPUS_DIR = RAW_DIR / "corpus"
+DOCS_PATH = CORPUS_DIR / "documents.jsonl"
+SCRAPE_LOG_PATH = CORPUS_DIR / "scrape_log.csv"
+
+GOVUK_BASE = "https://www.gov.uk"
+GOVUK_SEARCH_URL = "https://www.gov.uk/api/search.json"
+MAIB_QUERIES = [
+    "wind farm", "offshore", "crew transfer", "personnel transfer", "gangway",
+    "heavy weather", "swell", "crane", "lifting operation", "supply vessel",
+    "standby vessel", "platform", "weather", "mooring", "helicopter",
+]
+MAIB_MAX_PER_QUERY = 300
+
+HSE_HOST = "www.hse.gov.uk"
+HSE_SEEDS = [
+    "https://www.hse.gov.uk/offshore/notices/index.htm",
+    "https://www.hse.gov.uk/safetybulletins/bulletins-archive.htm",
+    "https://www.hse.gov.uk/offshore/infosheets.htm",
+    "https://www.hse.gov.uk/offshore/publications.htm",
+    "https://www.hse.gov.uk/offshore/topics.htm",
+]
+HSE_PATH_PREFIXES = ("/safetybulletins/", "/offshore/")
+HSE_MAX_DOCS = 400
+
+RELEVANT_PATTERN = (
+    r"offshore|wind ?farm|wind turbine|crew transfer|personnel transfer|gangway|"
+    r"walk[- ]to[- ]work|heavy weather|swell|sea state|wave|crane|lifting|"
+    r"platform|installation|standby vessel|supply vessel|mooring|helicopter|"
+    r"dropped object|weather"
+)
+SCRAPE_DELAY_S = 2.0
+MIN_CHARS = 400
+PDF_MAX_PAGES = 60
