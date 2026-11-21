@@ -43,3 +43,11 @@ def test_build(tmp_path):
     assert df["chunk_id"].is_unique and df["chunk_id"].iloc[0] == "aaa-0000"
     assert (df["n_words"] >= cfg.MIN_CHUNK_WORDS).all()
     assert len((tmp_path / "chunks.jsonl").read_text(encoding="utf-8").splitlines()) == len(df)
+
+
+def test_core_uses_title_and_opening_only():
+    assert not bc.is_core("Cruise ship fire", "the crane on deck " + "word " * 100)
+    assert bc.is_core("Wind farm transfer", "word " * 100)
+    assert bc.is_core("Contact with turbine", "Summary: a crew transfer vessel struck a monopile " + "word " * 50)
+    assert not bc.is_core("Trawler collision", "word " * 400 + "offshore offshore offshore")
+    assert bc.is_core("Reporting of zone infringements", "text", "https://www.hse.gov.uk/offshore/x.htm")

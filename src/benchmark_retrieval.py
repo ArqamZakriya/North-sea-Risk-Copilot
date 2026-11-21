@@ -1,6 +1,6 @@
 """Build and score the retrieval benchmark.
 
-Step 1, pool:  python src/benchmark_retrieval.py pool
+Step 1, pool:  python src/benchmark_retrieval.py pool [--core-only]
     Reads data/benchmark/queries.csv (columns qid, author, query). For each query it takes the
     top cfg.POOL_TOP documents from BM25, dense and hybrid search and writes the union to
     data/benchmark/pool.csv with an empty `relevant` column.
@@ -32,7 +32,7 @@ import config as cfg
 import retrieval
 
 
-def make_pool(R, queries_path=None, pool_path=None, top=None):
+def make_pool(R, queries_path=None, pool_path=None, top=None, core_only=False):
     """Write the pooled candidate documents for every query. Returns the pool DataFrame."""
     queries = pd.read_csv(queries_path or cfg.QUERIES_PATH)
     top = top or cfg.POOL_TOP
@@ -40,7 +40,7 @@ def make_pool(R, queries_path=None, pool_path=None, top=None):
     for q in queries.itertuples():
         found, best = {}, {}
         for m in retrieval.METHODS:
-            for chunk in R.top_chunks(m, q.query, k=top):
+            for chunk in R.top_chunks(m, q.query, k=top, core_only=core_only):
                 found.setdefault(chunk["doc_id"], []).append(m)
                 best.setdefault(chunk["doc_id"], chunk)
         for doc_id, methods in found.items():
@@ -92,7 +92,7 @@ def main():
         raise SystemExit(f"{cfg.QUERIES_PATH} not found. Create it with columns qid, author, query.")
     R = retrieval.load_retrievers()
     if a.step == "pool":
-        pool = make_pool(R)
+        pool = make_pool(R, core_only=a.core_only)
         print(f"Wrote {len(pool)} candidate rows for {pool['qid'].nunique()} queries to {cfg.POOL_PATH}")
         print("Now fill the `relevant` column with 1 or 0, then run: python src/benchmark_retrieval.py evaluate")
         return

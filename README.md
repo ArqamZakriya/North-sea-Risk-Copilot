@@ -31,9 +31,9 @@ pip install -r requirements-dev.txt
 
 10. `python src/build_embeddings.py` embeds every chunk with MiniLM and saves `data/processed/embeddings.npy` (float16). It takes several minutes on a laptop CPU.
 11. Retrieval benchmark. Each member writes 10 queries into `data/benchmark/queries.csv` (columns `qid,author,query`, see `queries_template.csv`). Use different wording and synonyms, because that is where BM25 and dense search differ. Then:
-    - `python src/benchmark_retrieval.py pool` writes `data/benchmark/pool.csv`, the top 5 documents from each of BM25, dense and hybrid search for every query.
+    - `python src/benchmark_retrieval.py pool --core-only` writes `data/benchmark/pool.csv`, the top 5 documents from each of BM25, dense and hybrid search for every query.
     - Open `pool.csv`, read each document through its `url` and fill the `relevant` column with 1 (the document answers the query) or 0. Agree the rule in the group first and mark independently when possible.
-    - `python src/benchmark_retrieval.py evaluate` prints hit@3, recall@3, MRR and mean query time per method and writes `data/benchmark/retrieval_results.json`. Add `--core-only` to restrict search to core offshore documents.
+    - `python src/benchmark_retrieval.py evaluate --core-only` prints hit@3, recall@3, MRR and mean query time per method and writes `data/benchmark/retrieval_results.json`. Use `--core-only` in both steps so the benchmark searches the same offshore-focused corpus as the app. Running both without the flag gives the full-corpus comparison.
 
 More steps are added as the project progresses.
 

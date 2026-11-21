@@ -2,6 +2,9 @@
 
 Usage:
     python src/search_demo.py "crew transfer in heavy swell"
+    python src/search_demo.py --core "crew transfer in heavy swell"
+
+The --core option searches only chunks from documents flagged as offshore operations.
 """
 
 import sys
@@ -13,13 +16,15 @@ import retrieval
 
 def main():
     """Run the query through BM25, dense and hybrid search and print the results."""
-    if len(sys.argv) < 2:
-        raise SystemExit('Usage: python src/search_demo.py "your query"')
-    query = " ".join(sys.argv[1:])
+    args = [a for a in sys.argv[1:] if a != "--core"]
+    core_only = len(args) != len(sys.argv) - 1
+    if not args:
+        raise SystemExit('Usage: python src/search_demo.py [--core] "your query"')
+    query = " ".join(args)
     R = retrieval.load_retrievers()
     for method in retrieval.METHODS:
         print(f"\n== {method} ==")
-        for c in R.top_chunks(method, query, k=3):
+        for c in R.top_chunks(method, query, k=3, core_only=core_only):
             print(f"- {c['title']} [{c['source']}]\n  {c['url']}\n  {c['text'][:200]}...")
 
 

@@ -82,10 +82,11 @@ CHUNK_OVERLAP = 40
 MIN_CHUNK_WORDS = 50
 REPEAT_LINE_LIMIT = 4
 CORE_PATTERN = (
-    r"wind ?farm|offshore|crew transfer|gangway|walk[- ]to[- ]work|platform supply|"
-    r"standby vessel|drill|jack-?up|crane|lifting|turbine|helicopter|pipelay|subsea|"
-    r"supply vessel|accommodation|installation vessel"
+    r"offshore|wind ?farm|wind turbine|turbine (tower|foundation)|crew transfer|personnel transfer|"
+    r"gangway|walk[- ]to[- ]work|platform supply|standby (safety )?vessel|jack-?up|fpso|"
+    r"drill ?ship|drilling (rig|unit)|oil (rig|platform)|oil (and|&) gas|helideck|pipelay|windcat"
 )
+CORE_HEAD_WORDS = 300
 
 HORIZON = 6
 VAL_START = "2025-01-01"

@@ -58,9 +58,17 @@ def split_words(words, size, overlap):
     return pieces
 
 
-def is_core(title, text):
-    """True when the title or the opening of the text names an offshore operations topic."""
-    return re.search(cfg.CORE_PATTERN, f"{title} {text[:3000]}", re.I) is not None
+def is_core(title, text, url=""):
+    """True for documents about offshore operations.
+
+    HSE pages under /offshore/ are core. Other documents are core when a strong offshore term
+    appears in the title or in the first cfg.CORE_HEAD_WORDS words, which is where a report
+    states what it is about. Mentions deep inside a long report do not count.
+    """
+    if "hse.gov.uk/offshore/" in url:
+        return True
+    head = f"{title} {' '.join(text.split()[:cfg.CORE_HEAD_WORDS])}"
+    return re.search(cfg.CORE_PATTERN, head, re.I) is not None
 
 
 def build(docs_path=None, out_path=None):
@@ -76,7 +84,7 @@ def build(docs_path=None, out_path=None):
                 continue
             doc = json.loads(line)
             text = clean_text(doc["text"])
-            core = is_core(doc["title"], text)
+            core = is_core(doc["title"], text, doc["url"])
             pieces = split_words(text.split(), cfg.CHUNK_WORDS, cfg.CHUNK_OVERLAP)
             for i, piece in enumerate(pieces):
                 if len(piece) < cfg.MIN_CHUNK_WORDS and len(pieces) > 1:
@@ -112,6 +120,14 @@ def summarise(df):
     print("\nWords per chunk:")
     print(df["n_words"].describe().round(1).to_string())
     print(f"\nCore share of chunks: {df['core'].mean():.1%}")
+    docs = df.drop_duplicates("doc_id")
+    print(f"Core documents: {int(docs['core'].sum())} of {len(docs)}")
+    print(docs.groupby("source")["core"].agg(core="sum", total="size").to_string())
+    for flag, label in ((True, "core"), (False, "not core")):
+        sample = docs[docs["core"] == flag]
+        print(f"\nRandom {label} titles (20):")
+        for t in sample.sample(min(20, len(sample)), random_state=cfg.SEED)["title"]:
+            print(" -", t[:110])
 
 
 if __name__ == "__main__":
