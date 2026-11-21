@@ -1,0 +1,420 @@
+{
+  "threshold_set": "guide_default",
+  "thresholds": {
+    "wind_col": "wind_gusts_10m",
+    "wind_warn": 15.0,
+    "wind_crit": 25.0,
+    "wave_warn": 1.5,
+    "wave_crit": 3.0
+  },
+  "horizon_hours": 6,
+  "seed": 42,
+  "quick": false,
+  "versions": {
+    "sklearn": "1.9.1",
+    "xgboost": "3.2.0",
+    "pandas": "3.1.1"
+  },
+  "split": {
+    "train": 350552,
+    "validation": 70032,
+    "test": 60240,
+    "train_class_share": {
+      "Normal": 0.5459,
+      "Warning": 0.3444,
+      "Critical": 0.1098
+    },
+    "validation_class_share": {
+      "Normal": 0.5761,
+      "Warning": 0.33,
+      "Critical": 0.0939
+    },
+    "test_class_share": {
+      "Normal": 0.5865,
+      "Warning": 0.3034,
+      "Critical": 0.1101
+    }
+  },
+  "features": [
+    "wind_speed_10m",
+    "wind_speed_100m",
+    "wind_gusts_10m",
+    "temperature_2m",
+    "surface_pressure",
+    "wave_height",
+    "wave_period",
+    "wind_speed_100m_mean_6h",
+    "wind_speed_100m_std_6h",
+    "wind_speed_100m_mean_24h",
+    "wind_speed_100m_std_24h",
+    "wind_gusts_10m_mean_6h",
+    "wind_gusts_10m_std_6h",
+    "wind_gusts_10m_mean_24h",
+    "wind_gusts_10m_std_24h",
+    "wave_height_mean_6h",
+    "wave_height_std_6h",
+    "wave_height_mean_24h",
+    "wave_height_std_24h",
+    "pressure_delta_1h",
+    "pressure_delta_3h",
+    "wave_delta_1h",
+    "gust_factor",
+    "marine_stress_index",
+    "hour_sin",
+    "hour_cos",
+    "month_sin",
+    "month_cos"
+  ],
+  "selection_rule": "Models within the size and latency limits are kept. Those with validation Critical recall within the tolerance of the best are shortlisted. The highest validation macro-F1 wins.",
+  "limits": {
+    "max_size_mb": 50,
+    "max_latency_ms": 50,
+    "recall_tolerance": 0.03
+  },
+  "trials": {
+    "LogReg": [
+      {
+        "params": {
+          "C": 0.1
+        },
+        "val_macro_f1": 0.890962874632848,
+        "val_crit_recall": 0.935807727411013,
+        "fit_seconds": 11.8
+      },
+      {
+        "params": {
+          "C": 1.0
+        },
+        "val_macro_f1": 0.8908693013358251,
+        "val_crit_recall": 0.9356556130209918,
+        "fit_seconds": 11.7
+      },
+      {
+        "params": {
+          "C": 10.0
+        },
+        "val_macro_f1": 0.8906671192601454,
+        "val_crit_recall": 0.9355034986309705,
+        "fit_seconds": 6.5
+      }
+    ],
+    "RandomForest": [
+      {
+        "params": {
+          "max_depth": 8,
+          "min_samples_leaf": 5
+        },
+        "val_macro_f1": 0.9029665533166162,
+        "val_crit_recall": 0.901886218436264,
+        "fit_seconds": 19.8
+      },
+      {
+        "params": {
+          "max_depth": 8,
+          "min_samples_leaf": 20
+        },
+        "val_macro_f1": 0.9024079976762563,
+        "val_crit_recall": 0.9017341040462428,
+        "fit_seconds": 22.9
+      },
+      {
+        "params": {
+          "max_depth": 12,
+          "min_samples_leaf": 5
+        },
+        "val_macro_f1": 0.9140881260312602,
+        "val_crit_recall": 0.901886218436264,
+        "fit_seconds": 41.5
+      },
+      {
+        "params": {
+          "max_depth": 12,
+          "min_samples_leaf": 20
+        },
+        "val_macro_f1": 0.9119738753297337,
+        "val_crit_recall": 0.9058411925768177,
+        "fit_seconds": 42.9
+      }
+    ],
+    "XGBoost": [
+      {
+        "params": {
+          "max_depth": 4,
+          "learning_rate": 0.05
+        },
+        "val_macro_f1": 0.9127439180028208,
+        "val_crit_recall": 0.9135990264679039,
+        "fit_seconds": 15.5
+      },
+      {
+        "params": {
+          "max_depth": 4,
+          "learning_rate": 0.1
+        },
+        "val_macro_f1": 0.9139737113984189,
+        "val_crit_recall": 0.9134469120778825,
+        "fit_seconds": 14.4
+      },
+      {
+        "params": {
+          "max_depth": 6,
+          "learning_rate": 0.05
+        },
+        "val_macro_f1": 0.9146442789659183,
+        "val_crit_recall": 0.9094919379373289,
+        "fit_seconds": 16.4
+      },
+      {
+        "params": {
+          "max_depth": 6,
+          "learning_rate": 0.1
+        },
+        "val_macro_f1": 0.915556317392156,
+        "val_crit_recall": 0.9031031335564345,
+        "fit_seconds": 27.2
+      }
+    ]
+  },
+  "models": {
+    "LogReg": {
+      "params": {
+        "C": 0.1
+      },
+      "val_macro_f1": 0.890962874632848,
+      "val_crit_recall": 0.935807727411013,
+      "latency_ms": 0.3267020000203047,
+      "size_mb": 0.001313,
+      "test_macro_f1": 0.8948178305558593,
+      "test_crit_recall": 0.9463127733373549,
+      "cm_test": [
+        [
+          33098,
+          2233,
+          0
+        ],
+        [
+          1648,
+          15429,
+          1201
+        ],
+        [
+          3,
+          353,
+          6275
+        ]
+      ]
+    },
+    "RandomForest": {
+      "params": {
+        "max_depth": 12,
+        "min_samples_leaf": 5
+      },
+      "val_macro_f1": 0.9140881260312602,
+      "val_crit_recall": 0.901886218436264,
+      "latency_ms": 26.16347549999773,
+      "size_mb": 22.22654,
+      "test_macro_f1": 0.9188361683607994,
+      "test_crit_recall": 0.9280651485447142,
+      "cm_test": [
+        [
+          34043,
+          1288,
+          0
+        ],
+        [
+          1859,
+          15808,
+          611
+        ],
+        [
+          3,
+          474,
+          6154
+        ]
+      ]
+    },
+    "XGBoost": {
+      "params": {
+        "max_depth": 6,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.915556317392156,
+      "val_crit_recall": 0.9031031335564345,
+      "latency_ms": 1.3054325000121025,
+      "size_mb": 1.321958,
+      "test_macro_f1": 0.9213315947394528,
+      "test_crit_recall": 0.9294224098929271,
+      "cm_test": [
+        [
+          34070,
+          1261,
+          0
+        ],
+        [
+          1684,
+          15960,
+          634
+        ],
+        [
+          1,
+          467,
+          6163
+        ]
+      ]
+    },
+    "Persistence": {
+      "val_macro_f1": 0.8858737796684409,
+      "val_crit_recall": 0.771372071797992,
+      "test_macro_f1": 0.8942523446968703,
+      "test_crit_recall": 0.823706831548786,
+      "cm_test": [
+        [
+          34802,
+          529,
+          0
+        ],
+        [
+          3419,
+          14670,
+          189
+        ],
+        [
+          13,
+          1156,
+          5462
+        ]
+      ]
+    }
+  },
+  "winner": "LogReg",
+  "errors": {
+    "by_site": {
+      "BrentArea": {
+        "hours": 7530,
+        "critical_hours": 2318,
+        "model_macro_f1": 0.9208459532368112,
+        "persist_macro_f1": 0.9101110170137517,
+        "model_crit_recall": 0.9728213977566867,
+        "persist_crit_recall": 0.8770491803278688
+      },
+      "DoggerBankA": {
+        "hours": 7530,
+        "critical_hours": 799,
+        "model_macro_f1": 0.8986027395976798,
+        "persist_macro_f1": 0.8847455753833625,
+        "model_crit_recall": 0.9286608260325406,
+        "persist_crit_recall": 0.7584480600750939
+      },
+      "EOWDC": {
+        "hours": 7530,
+        "critical_hours": 465,
+        "model_macro_f1": 0.8619830712822111,
+        "persist_macro_f1": 0.8772012132374348,
+        "model_crit_recall": 0.9204301075268817,
+        "persist_crit_recall": 0.8129032258064516
+      },
+      "FortiesArea": {
+        "hours": 7530,
+        "critical_hours": 1364,
+        "model_macro_f1": 0.903514434985622,
+        "persist_macro_f1": 0.9036037077650972,
+        "model_crit_recall": 0.9479472140762464,
+        "persist_crit_recall": 0.841642228739003
+      },
+      "GreaterGabbard": {
+        "hours": 7530,
+        "critical_hours": 67,
+        "model_macro_f1": 0.770697833226658,
+        "persist_macro_f1": 0.8077714636863095,
+        "model_crit_recall": 0.7761194029850746,
+        "persist_crit_recall": 0.5223880597014925
+      },
+      "HornseaOne": {
+        "hours": 7530,
+        "critical_hours": 572,
+        "model_macro_f1": 0.8799012236023546,
+        "persist_macro_f1": 0.871399488263433,
+        "model_crit_recall": 0.9230769230769231,
+        "persist_crit_recall": 0.7185314685314685
+      },
+      "MorayEast": {
+        "hours": 7530,
+        "critical_hours": 668,
+        "model_macro_f1": 0.8807121840783058,
+        "persist_macro_f1": 0.8948912988221899,
+        "model_crit_recall": 0.9520958083832335,
+        "persist_crit_recall": 0.8592814371257484
+      },
+      "Teesside": {
+        "hours": 7530,
+        "critical_hours": 378,
+        "model_macro_f1": 0.8539216234142,
+        "persist_macro_f1": 0.8450927046062541,
+        "model_crit_recall": 0.9021164021164021,
+        "persist_crit_recall": 0.7328042328042328
+      }
+    },
+    "by_month": {
+      "1": {
+        "critical_hours": 2160,
+        "model_crit_recall": 0.975925925925926,
+        "persist_crit_recall": 0.887962962962963
+      },
+      "2": {
+        "critical_hours": 1369,
+        "model_crit_recall": 0.9839298758217677,
+        "persist_crit_recall": 0.8780131482834186
+      },
+      "3": {
+        "critical_hours": 1038,
+        "model_crit_recall": 0.9402697495183044,
+        "persist_crit_recall": 0.8169556840077071
+      },
+      "4": {
+        "critical_hours": 462,
+        "model_crit_recall": 0.9242424242424242,
+        "persist_crit_recall": 0.7640692640692641
+      },
+      "5": {
+        "critical_hours": 224,
+        "model_crit_recall": 0.8616071428571429,
+        "persist_crit_recall": 0.7142857142857143
+      },
+      "6": {
+        "critical_hours": 7,
+        "model_crit_recall": 0.8571428571428571,
+        "persist_crit_recall": 0.14285714285714285
+      },
+      "7": {
+        "critical_hours": 97,
+        "model_crit_recall": 0.8247422680412371,
+        "persist_crit_recall": 0.6288659793814433
+      },
+      "8": {
+        "critical_hours": 9,
+        "model_crit_recall": 0.6666666666666666,
+        "persist_crit_recall": 0.3333333333333333
+      },
+      "9": {
+        "critical_hours": 295,
+        "model_crit_recall": 0.8915254237288136,
+        "persist_crit_recall": 0.7084745762711865
+      },
+      "10": {
+        "critical_hours": 970,
+        "model_crit_recall": 0.8958762886597939,
+        "persist_crit_recall": 0.7288659793814433
+      },
+      "11": {
+        "critical_hours": 0,
+        "model_crit_recall": 0.0,
+        "persist_crit_recall": 0.0
+      }
+    },
+    "missed_critical": 356,
+    "missed_predicted_as": {
+      "Warning": 353,
+      "Normal": 3
+    }
+  }
+}

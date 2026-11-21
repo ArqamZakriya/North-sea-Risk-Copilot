@@ -74,3 +74,43 @@ RELEVANT_PATTERN = (
 SCRAPE_DELAY_S = 2.0
 MIN_CHARS = 400
 PDF_MAX_PAGES = 60
+
+PROCESSED_DIR = ROOT / "data" / "processed"
+CHUNKS_PATH = PROCESSED_DIR / "chunks.jsonl"
+CHUNK_WORDS = 200
+CHUNK_OVERLAP = 40
+MIN_CHUNK_WORDS = 50
+REPEAT_LINE_LIMIT = 4
+CORE_PATTERN = (
+    r"wind ?farm|offshore|crew transfer|gangway|walk[- ]to[- ]work|platform supply|"
+    r"standby vessel|drill|jack-?up|crane|lifting|turbine|helicopter|pipelay|subsea|"
+    r"supply vessel|accommodation|installation vessel"
+)
+
+HORIZON = 6
+VAL_START = "2025-01-01"
+TEST_START = "2026-01-01"
+THRESHOLD_SETS = {
+    "cited": dict(wind_col="wind_speed_100m", wind_warn=12.9, wind_crit=15.4, wave_warn=1.5, wave_crit=2.0),
+    "guide_default": dict(wind_col="wind_gusts_10m", wind_warn=15.0, wind_crit=25.0, wave_warn=1.5, wave_crit=3.0),
+}
+ACTIVE_THRESHOLDS = "cited"
+NON_FEATURE_COLUMNS = ["y", "y_persist", "wind_direction_100m", "wave_direction", "grid_lat", "grid_lon"]
+
+MODELS_DIR = ROOT / "models"
+TEST_SAMPLE_PATH = PROCESSED_DIR / "test_sample.csv"
+TEST_SAMPLE_PER_SITE = 400
+SEED = 42
+MAX_SIZE_MB = 50
+MAX_LATENCY_MS = 50
+RECALL_TOLERANCE = 0.03
+
+BENCH_DIR = ROOT / "data" / "benchmark"
+QUERIES_PATH = BENCH_DIR / "queries.csv"
+POOL_PATH = BENCH_DIR / "pool.csv"
+RETRIEVAL_RESULTS_PATH = BENCH_DIR / "retrieval_results.json"
+EMBED_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+EMBEDDINGS_PATH = PROCESSED_DIR / "embeddings.npy"
+POOL_TOP = 5
+RRF_K = 60
+RRF_DEPTH = 100
