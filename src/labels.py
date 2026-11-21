@@ -69,12 +69,65 @@ def add_features(g):
     return g
 
 
-def build(df, th=None):
-    """Features and labels for every site. Rows without a full feature history or target window are dropped."""
+def add_extended_features(g):
+    """Add longer history, recent extremes, wave steepness and direction features for one site."""
+    g = g.copy()
+    for c in ("wind_speed_100m", "wave_height"):
+        for k in (1, 3, 6, 12):
+            g[f"{c}_lag_{k}h"] = g[c].shift(k)
+        g[f"{c}_mean_3h"] = g[c].rolling(3).mean()
+    for c in ROLL_COLUMNS:
+        for w in (6, 12, 24):
+            g[f"{c}_max_{w}h"] = g[c].rolling(w).max()
+    g["wind_speed_100m_delta_3h"] = g["wind_speed_100m"].diff(3)
+    g["wind_speed_100m_delta_6h"] = g["wind_speed_100m"].diff(6)
+    g["wave_delta_3h"] = g["wave_height"].diff(3)
+    g["wave_delta_6h"] = g["wave_height"].diff(6)
+    g["pressure_delta_6h"] = g["surface_pressure"].diff(6)
+    g["pressure_delta_12h"] = g["surface_pressure"].diff(12)
+    g["wave_steepness"] = g["wave_height"] / (g["wave_period"] ** 2 + 0.1)
+    wd, vd = np.deg2rad(g["wind_direction_100m"]), np.deg2rad(g["wave_direction"])
+    g["wind_dir_sin"], g["wind_dir_cos"] = np.sin(wd), np.cos(wd)
+    g["wave_dir_sin"], g["wave_dir_cos"] = np.sin(vd), np.cos(vd)
+    g["wind_wave_align"] = np.cos(wd - vd)
+    g["site_lat"], g["site_lon"] = g["grid_lat"], g["grid_lon"]
+    return g
+
+
+def cross_site_features(frames):
+    """For each site, regional wind and wave summaries from the other sites at the same hour and their 3 hour change."""
+    idx = sorted(set().union(*[f.index for f in frames.values()]))
+    wind = pd.DataFrame({s: f["wind_speed_100m"].reindex(idx) for s, f in frames.items()})
+    wave = pd.DataFrame({s: f["wave_height"].reindex(idx) for s, f in frames.items()})
+    out = {}
+    for s in wind.columns:
+        others = [c for c in wind.columns if c != s]
+        wm, vm = wind[others].mean(axis=1), wave[others].mean(axis=1)
+        out[s] = pd.DataFrame({
+            "others_wind_mean": wm, "others_wind_max": wind[others].max(axis=1),
+            "others_wave_mean": vm, "others_wave_max": wave[others].max(axis=1),
+            "others_wind_mean_delta_3h": wm.diff(3), "others_wave_mean_delta_3h": vm.diff(3)})
+    return out
+
+
+def build(df, th=None, feature_set="base"):
+    """Features and labels for every site. Rows without a full feature history or target window are dropped.
+
+    feature_set "base" uses each site's own recent weather. "extended" adds longer history, recent maxima,
+    direction and steepness features, the site position, and summaries of the other sites at the same hour.
+    Every feature uses only data from the current hour and earlier.
+    """
     th = th or cfg.THRESHOLD_SETS[cfg.ACTIVE_THRESHOLDS]
+    extended = feature_set == "extended"
+    frames = {site: regular(g.assign(site=site)) for site, g in df.groupby("site")}
+    cross = cross_site_features(frames) if extended and len(frames) > 1 else {}
     parts = []
-    for site, g in df.groupby("site"):
-        g = add_features(regular(g.assign(site=site)))
+    for site, g in frames.items():
+        g = add_features(g)
+        if extended:
+            g = add_extended_features(g)
+            if site in cross:
+                g = g.join(cross[site])
         g["y"], g["y_persist"] = targets(g, th)
         g["site"] = site
         parts.append(g.reset_index())

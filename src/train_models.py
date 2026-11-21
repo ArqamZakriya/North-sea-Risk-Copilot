@@ -20,6 +20,7 @@ Usage:
     python src/train_models.py
     python src/train_models.py --thresholds guide_default
     python src/train_models.py --quick
+    python src/train_models.py --features extended --out-dir models/extended
     python src/train_models.py --thresholds guide_default --out-dir models/sensitivity_guide_default
 """
 
@@ -149,22 +150,22 @@ def error_analysis(te, pred):
 NAMES = {0: "Normal", 1: "Warning", 2: "Critical"}
 
 
-def run(df, set_name=None, quick=False, out_dir=None):
+def run(df, set_name=None, quick=False, out_dir=None, feature_set="base"):
     """Run the full comparison on a collected weather DataFrame and write all artefacts. Returns results.
 
-    With a custom out_dir the artefacts go there and the shared test sample is left untouched.
+    With a custom out_dir the artefacts and the test sample go there and the shared copies are left untouched.
     """
     default_dir = cfg.MODELS_DIR
     out_dir = Path(out_dir) if out_dir else default_dir
     set_name = set_name or cfg.ACTIVE_THRESHOLDS
     th = cfg.THRESHOLD_SETS[set_name]
     np.random.seed(cfg.SEED)
-    d = labels.build(df, th)
+    d = labels.build(df, th, feature_set)
     feats = labels.feature_columns(d)
     tr, va, te = labels.time_split(d)
     if quick:
         tr = tr.iloc[::4]
-    print(f"Thresholds: {set_name} {th}")
+    print(f"Thresholds: {set_name} {th}; feature set: {feature_set}")
     print(f"Rows: train {len(tr)}, validation {len(va)}, test {len(te)}; features {len(feats)}")
 
     sc = StandardScaler().fit(tr[feats])
@@ -210,7 +211,7 @@ def run(df, set_name=None, quick=False, out_dir=None):
 
     share = lambda f: {NAMES[k]: round(float(v), 4) for k, v in f["y"].value_counts(normalize=True).sort_index().items()}
     results = dict(
-        threshold_set=set_name, thresholds=th, horizon_hours=cfg.HORIZON, seed=cfg.SEED, quick=quick,
+        threshold_set=set_name, feature_set=feature_set, thresholds=th, horizon_hours=cfg.HORIZON, seed=cfg.SEED, quick=quick,
         versions=dict(sklearn=sklearn.__version__, xgboost=xgboost.__version__, pandas=pd.__version__),
         split=dict(train=len(tr), validation=len(va), test=len(te), train_class_share=share(tr),
                    validation_class_share=share(va), test_class_share=share(te)),
@@ -220,14 +221,13 @@ def run(df, set_name=None, quick=False, out_dir=None):
     with open(out_dir / "results.json", "w") as f:
         json.dump(results, f, indent=2)
 
-    if out_dir != default_dir:
-        return results
+    sample_path = cfg.TEST_SAMPLE_PATH if out_dir == default_dir else out_dir / "test_sample.csv"
     parts = [g.sample(min(len(g), cfg.TEST_SAMPLE_PER_SITE), random_state=cfg.SEED) for _, g in te.groupby("site")]
     sample = pd.concat(parts).sort_values(["site", "time"])
-    cfg.TEST_SAMPLE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    sample_path.parent.mkdir(parents=True, exist_ok=True)
     out = sample[["time", "site"] + feats + ["y", "y_persist"]].copy()
     out[feats] = out[feats].round(4)
-    out.to_csv(cfg.TEST_SAMPLE_PATH, index=False)
+    out.to_csv(sample_path, index=False)
     return results
 
 
@@ -247,9 +247,10 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--thresholds", default=cfg.ACTIVE_THRESHOLDS, choices=list(cfg.THRESHOLD_SETS))
     p.add_argument("--quick", action="store_true", help="small grids and fewer rows, for a smoke test")
-    p.add_argument("--out-dir", help="write artefacts here instead of models/, for sensitivity runs")
+    p.add_argument("--out-dir", help="write artefacts here instead of models/, for sensitivity or feature-set runs")
+    p.add_argument("--features", default="base", choices=["base", "extended"], help="feature set")
     a = p.parse_args()
     if not cfg.CSV_PATH.exists():
         raise SystemExit(f"{cfg.CSV_PATH} not found. Run collect_weather.py first.")
     frame = pd.read_csv(cfg.CSV_PATH, parse_dates=["time"])
-    print_table(run(frame, a.thresholds, a.quick, a.out_dir))
+    print_table(run(frame, a.thresholds, a.quick, a.out_dir, a.features))

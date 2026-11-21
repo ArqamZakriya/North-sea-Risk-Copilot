@@ -1,7 +1,7 @@
 """Build and score the retrieval benchmark.
 
 Step 1, pool:  python src/benchmark_retrieval.py pool [--core-only]
-    Reads data/benchmark/queries.csv (columns qid, author, query). For each query it takes the
+    Reads data/benchmark/queries.csv (columns qid, author, query, and optionally complexity). For each query it takes the
     top cfg.POOL_TOP documents from BM25, dense and hybrid search and writes the union to
     data/benchmark/pool.csv with an empty `relevant` column.
 
@@ -54,8 +54,18 @@ def make_pool(R, queries_path=None, pool_path=None, top=None, core_only=False):
     return pool
 
 
-def evaluate(R, pool_path=None, k=3, core_only=False):
-    """Score every method against the marked pool. Returns a results dict."""
+def aggregate(rows):
+    """Mean hit@3, recall@3, MRR and query time over per-query result rows."""
+    return dict(hit_at_3=float(np.mean([r["hit"] for r in rows])), recall_at_3=float(np.mean([r["recall"] for r in rows])),
+                mrr=float(np.mean([r["rr"] for r in rows])), mean_query_ms=float(np.mean([r["ms"] for r in rows])),
+                queries=len(rows))
+
+
+def evaluate(R, pool_path=None, k=3, core_only=False, queries_path=None):
+    """Score every method against the marked pool. Returns a results dict.
+
+    If the queries file has a `complexity` column, results are also reported for each value of it.
+    """
     pool = pd.read_csv(pool_path or cfg.POOL_PATH)
     missing = pool["relevant"].isna().sum()
     if missing:
@@ -64,22 +74,31 @@ def evaluate(R, pool_path=None, k=3, core_only=False):
     queries = pool.drop_duplicates("qid").set_index("qid")["query"]
     usable = {q: r for q, r in rel.items() if r}
     skipped = sorted(set(rel) - set(usable))
-    results = {}
+    groups = {}
+    qfile = Path(queries_path or cfg.QUERIES_PATH)
+    if qfile.exists():
+        qdf = pd.read_csv(qfile)
+        if "complexity" in qdf.columns:
+            groups = dict(zip(qdf["qid"], qdf["complexity"]))
+    results, by_group = {}, {}
     for m in retrieval.METHODS:
         R.docs(m, next(iter(queries)), core_only)
-        hits, recalls, rrs, times = [], [], [], []
+        rows = []
         for q, relevant in usable.items():
             t0 = time.perf_counter()
             docs = R.docs(m, queries[q], core_only)
-            times.append((time.perf_counter() - t0) * 1000)
+            ms = (time.perf_counter() - t0) * 1000
             flags = [d in relevant for d in docs]
-            hits.append(float(any(flags[:k])))
-            recalls.append(len(relevant & set(docs[:k])) / len(relevant))
-            rrs.append(next((1 / (i + 1) for i, f in enumerate(flags) if f), 0.0))
-        results[m] = dict(hit_at_3=float(np.mean(hits)), recall_at_3=float(np.mean(recalls)),
-                          mrr=float(np.mean(rrs)), mean_query_ms=float(np.mean(times)))
-    return dict(queries_scored=len(usable), queries_without_relevant=skipped, pool_rows=len(pool),
-                relevant_documents=int(sum(len(r) for r in usable.values())), core_only=core_only, methods=results)
+            rows.append(dict(qid=q, hit=float(any(flags[:k])), recall=len(relevant & set(docs[:k])) / len(relevant),
+                             rr=next((1 / (i + 1) for i, f in enumerate(flags) if f), 0.0), ms=ms))
+        results[m] = aggregate(rows)
+        for g in sorted({groups[r["qid"]] for r in rows if r["qid"] in groups}):
+            by_group.setdefault(g, {})[m] = aggregate([r for r in rows if groups.get(r["qid"]) == g])
+    out = dict(queries_scored=len(usable), queries_without_relevant=skipped, pool_rows=len(pool),
+               relevant_documents=int(sum(len(r) for r in usable.values())), core_only=core_only, methods=results)
+    if by_group:
+        out["by_complexity"] = by_group
+    return out
 
 
 def main():
@@ -101,6 +120,9 @@ def main():
     with open(cfg.RETRIEVAL_RESULTS_PATH, "w") as f:
         json.dump(res, f, indent=2)
     print(pd.DataFrame(res["methods"]).T.round(3).to_string())
+    for group, table in res.get("by_complexity", {}).items():
+        print(f"\n{group} queries:")
+        print(pd.DataFrame(table).T.round(3).to_string())
     print(f"\nQueries scored: {res['queries_scored']}, relevant documents: {res['relevant_documents']}")
     if res["queries_without_relevant"]:
         print("Queries with no relevant document marked (excluded):", res["queries_without_relevant"])

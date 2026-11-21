@@ -45,3 +45,10 @@ def test_pick_winner_rule():
         "D": dict(val_crit_recall=0.70, val_macro_f1=0.95, size_mb=10, latency_ms=5),
     }
     assert tm.pick_winner(res) == "B"
+
+
+def test_extended_run_writes_to_custom_dir(tmp_path):
+    out = tmp_path / "ext"
+    res = tm.run(synthetic(), "cited", quick=True, out_dir=out, feature_set="extended")
+    assert res["feature_set"] == "extended" and len(res["features"]) > 28
+    assert (out / "best_model.joblib").exists() and (out / "test_sample.csv").exists()

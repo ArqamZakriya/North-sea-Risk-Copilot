@@ -49,7 +49,7 @@ def test_rankings():
 def test_pool_and_evaluate(tmp_path):
     R = make_retrievers()
     q = tmp_path / "queries.csv"
-    pd.DataFrame({"qid": ["Q1", "Q2"], "author": "t",
+    pd.DataFrame({"qid": ["Q1", "Q2"], "author": "t", "complexity": ["simple", "complex"],
                   "query": ["wave height limit crew transfer", "crane lifting high wind"]}).to_csv(q, index=False)
     pool = br.make_pool(R, q, tmp_path / "pool.csv", top=2)
     assert {"qid", "doc_id", "found_by", "relevant"} <= set(pool.columns)
@@ -57,7 +57,9 @@ def test_pool_and_evaluate(tmp_path):
     marked["relevant"] = [1 if (r.qid == "Q1" and r.doc_id == "d1") or (r.qid == "Q2" and r.doc_id == "d2") else 0
                           for r in marked.itertuples()]
     marked.to_csv(tmp_path / "pool.csv", index=False)
-    res = br.evaluate(R, tmp_path / "pool.csv")
+    res = br.evaluate(R, tmp_path / "pool.csv", queries_path=q)
     assert res["queries_scored"] == 2
+    assert set(res["by_complexity"]) == {"simple", "complex"}
+    assert res["by_complexity"]["complex"]["bm25"]["queries"] == 1
     for m in rt.METHODS:
         assert res["methods"][m]["hit_at_3"] == 1.0 and res["methods"][m]["mrr"] == 1.0

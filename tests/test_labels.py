@@ -70,3 +70,20 @@ def test_feature_count_and_split():
     assert va["time"].min() == b1 and va["time"].max() == b2 - pd.Timedelta(hours=cfg.HORIZON + 1)
     assert te["time"].min() == b2
     assert len(tr) + len(va) + len(te) < len(d)
+
+
+def test_extended_features_do_not_use_the_future():
+    df = synthetic(end="2025-06-30")
+    full = labels.build(df, TH, "extended")
+    cut = pd.Timestamp("2025-03-10 12:00")
+    altered = df.copy()
+    future = altered["time"] > cut
+    altered.loc[future, ["wind_speed_100m", "wave_height", "surface_pressure", "wind_gusts_10m", "wave_period"]] *= 3
+    altered.loc[future, ["wind_direction_100m", "wave_direction"]] = 10.0
+    after = labels.build(altered, TH, "extended")
+    cols = labels.feature_columns(full)
+    assert len(cols) > 28 and {"others_wave_max", "site_lat", "wave_steepness"} <= set(cols)
+    a = full[full["time"] <= cut].set_index(["site", "time"])[cols]
+    b = after[after["time"] <= cut].set_index(["site", "time"])[cols]
+    pd.testing.assert_frame_equal(a, b)
+    assert len(labels.feature_columns(labels.build(df, TH, "base"))) == 28

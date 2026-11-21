@@ -1,0 +1,41 @@
+qid,author,complexity,query
+Q01,member1,simple,offshore crane lifting in high wind
+Q02,member1,simple,tower crane failure in strong gusts
+Q03,member1,simple,lifting wire failure on rescue craft davit
+Q04,member1,simple,suspended load falls on deck injuring crew
+Q05,member1,simple,safety systems that stop an offshore crane overloading
+Q06,member1,simple,when is it too windy to lift cargo at sea
+Q07,member1,simple,weather limits for deck work on supply vessels
+Q08,member1,simple,inspection and maintenance of lifting gear on a platform
+Q09,member1,simple,dropped object hazards on offshore installations
+Q10,member1,simple,luffing jib crane
+Q11,member2,simple,crew transfer from vessel to wind turbine
+Q12,member2,simple,personnel falling into water during boat transfer
+Q13,member2,simple,gangway accident between vessel and platform
+Q14,member2,simple,catamaran hits turbine while workers climb the ladder
+Q15,member2,simple,fast rescue craft launch injury
+Q16,member2,simple,man overboard from standby vessel during recovery
+Q17,member2,simple,small workboat transfers in rough sea
+Q18,member2,simple,safe way to move technicians from a ship to an offshore structure
+Q19,member2,simple,wind farm workboat engine fire
+Q20,member2,simple,crush injury between vessel hull and small boat
+Q21,member3,simple,supply vessel collided with a jack-up rig
+Q22,member3,simple,ship hit an offshore platform and the platform was evacuated
+Q23,member3,simple,vessel drifting towards an installation in bad weather
+Q24,member3,simple,attendant vessel risk of striking offshore installations
+Q25,member3,simple,helicopter landing on platform in gusty conditions
+Q26,member3,simple,emergency shutdown valve failure on a pipeline
+Q27,member3,simple,fire on a standby safety vessel
+Q28,member3,simple,what incidents must be reported to the offshore regulator
+Q29,member3,simple,safety zone infringements around offshore structures
+Q30,member3,simple,fatigue and ergonomics of dynamic positioning controls
+Q31,member1,complex,A crane lift is planned on an offshore platform but gusts are forecast to rise during the operation. What guidance covers suspending the lift?
+Q32,member1,complex,Incidents where a load or equipment fell because a crane or davit failed while the vessel was moving in rough seas
+Q33,member1,complex,"What went wrong when lifting equipment was used beyond its limits, and which safety systems or inspections would have prevented it?"
+Q34,member1,complex,"Offshore notices warning about equipment failing under wind or weather loading, with recommended actions for operators"
+Q35,member2,complex,A technician was injured while stepping from a workboat onto a structure in heavy swell. What lessons have investigators drawn about transfer procedures?
+Q36,member2,complex,Accidents where a small fast boat was launched or recovered from a larger vessel in poor weather and someone was crushed or fell overboard
+Q37,member2,complex,"Wind farm vessel collisions or contacts during transfer, and what the investigators recommended about crew training and operating limits"
+Q38,member3,complex,"A vessel lost power or drifted near an offshore installation in bad weather. What happened, and what should operators do to avoid a collision?"
+Q39,member3,complex,"Which incidents show standby or supply vessels being damaged while working near platforms, and what were the causes?"
+Q40,member3,complex,Regulator guidance on what operators must report after a major offshore accident and how safety zones are enforced
