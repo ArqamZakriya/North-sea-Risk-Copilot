@@ -8,3 +8,7 @@ data/raw/*.csv
 data/raw/*.jsonl
 !data/raw/collection_log.csv
 models/**/candidates/
+
+.pytest_cache/
+README_backup.md
+folder_structure.txt

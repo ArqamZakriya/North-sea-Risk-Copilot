@@ -1,0 +1,62 @@
+{
+  "test_period": "2026 test split",
+  "test_set_evaluated": true,
+  "baseline": {
+    "model": "Extended Baseline",
+    "accuracy": 0.9091633466135458,
+    "macro_f1": 0.8768269476167849,
+    "critical_precision": 0.971997052321297,
+    "critical_recall": 0.8976675122192662,
+    "critical_f1": 0.933354776455452,
+    "confusion_matrix": [
+      [
+        32279,
+        2222,
+        19
+      ],
+      [
+        1178,
+        7980,
+        399
+      ],
+      [
+        99,
+        1555,
+        14509
+      ]
+    ],
+    "total_critical": 16163,
+    "missed_critical": 1654,
+    "missed_as_warning": 1555,
+    "missed_as_normal": 99
+  },
+  "experiment_v2": {
+    "model": "Experiment V2",
+    "accuracy": 0.9095783532536521,
+    "macro_f1": 0.8766479377177072,
+    "critical_precision": 0.9620311070448307,
+    "critical_recall": 0.9107838891294933,
+    "critical_f1": 0.935706340378198,
+    "confusion_matrix": [
+      [
+        32236,
+        2254,
+        30
+      ],
+      [
+        1170,
+        7836,
+        551
+      ],
+      [
+        91,
+        1351,
+        14721
+      ]
+    ],
+    "total_critical": 16163,
+    "missed_critical": 1442,
+    "missed_as_warning": 1351,
+    "missed_as_normal": 91
+  }
+}

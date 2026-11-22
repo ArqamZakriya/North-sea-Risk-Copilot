@@ -1,0 +1,9 @@
+site,test_hours,critical_hours,critical_precision,critical_recall,missed_critical,missed_as_warning,missed_as_normal
+BrentArea,7530,4350,0.9883,0.9552,195,193,2
+DoggerBankA,7530,2247,0.9723,0.8914,244,237,7
+EOWDC,7530,1242,0.9841,0.8986,126,115,11
+FortiesArea,7530,2861,0.9676,0.9294,202,195,7
+GreaterGabbard,7530,903,0.9261,0.7353,239,213,26
+HornseaOne,7530,1802,0.9756,0.864,245,225,20
+MorayEast,7530,1805,0.9435,0.8321,303,285,18
+Teesside,7530,953,0.9737,0.8951,100,92,8

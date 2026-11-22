@@ -1,0 +1,17 @@
+model,site,total_critical,detected_critical,missed_critical,critical_recall
+Extended Baseline,BrentArea,4350,4155,195,0.9551724137931035
+Extended Baseline,DoggerBankA,2247,2003,244,0.8914107699154428
+Extended Baseline,EOWDC,1242,1116,126,0.8985507246376812
+Extended Baseline,FortiesArea,2861,2659,202,0.929395316322964
+Extended Baseline,GreaterGabbard,903,664,239,0.7353266888150609
+Extended Baseline,HornseaOne,1802,1557,245,0.8640399556048834
+Extended Baseline,MorayEast,1805,1502,303,0.8321329639889197
+Extended Baseline,Teesside,953,853,100,0.8950682056663168
+Experiment V2,BrentArea,4350,4179,171,0.9606896551724138
+Experiment V2,DoggerBankA,2247,2027,220,0.9020916777926123
+Experiment V2,EOWDC,1242,1127,115,0.9074074074074074
+Experiment V2,FortiesArea,2861,2687,174,0.9391821041593849
+Experiment V2,GreaterGabbard,903,695,208,0.769656699889258
+Experiment V2,HornseaOne,1802,1596,206,0.8856825749167592
+Experiment V2,MorayEast,1805,1550,255,0.8587257617728532
+Experiment V2,Teesside,953,860,93,0.9024134312696747

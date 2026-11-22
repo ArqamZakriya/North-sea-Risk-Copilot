@@ -1,0 +1,9 @@
+site,Correct_Critical,Missed_as_Normal,Missed_as_Warning,total_critical,critical_recall
+BrentArea,4155,2,193,4350,0.9552
+DoggerBankA,2003,7,237,2247,0.8914
+EOWDC,1116,11,115,1242,0.8986
+FortiesArea,2659,7,195,2861,0.9294
+GreaterGabbard,664,26,213,903,0.7353
+HornseaOne,1557,20,225,1802,0.864
+MorayEast,1502,18,285,1805,0.8321
+Teesside,853,8,92,953,0.8951

@@ -1,0 +1,381 @@
+{
+  "experiment": "Critical-class sample-weight adjustment",
+  "feature_set": "extended",
+  "threshold_set": "cited",
+  "baseline_model": "XGBoost",
+  "baseline_validation_macro_f1": 0.8791016794780252,
+  "baseline_validation_critical_recall": 0.8844304338533875,
+  "selection": {
+    "critical_weight_multiplier": 1.5,
+    "max_depth": 6,
+    "learning_rate": 0.1,
+    "selection_reason": "Preselected validation candidate offering a balance between Critical recall and Macro-F1."
+  },
+  "selected_result": {
+    "critical_weight_multiplier": 1.5,
+    "parameters": {
+      "max_depth": 6,
+      "learning_rate": 0.1
+    },
+    "val_macro_f1": 0.8798584219511091,
+    "val_critical_recall": 0.8999251976918144,
+    "val_critical_precision": 0.9590047258441041,
+    "fit_seconds": 32.86,
+    "confusion_matrix": [
+      [
+        36828,
+        2533,
+        37
+      ],
+      [
+        1273,
+        9962,
+        683
+      ],
+      [
+        159,
+        1714,
+        16843
+      ]
+    ]
+  },
+  "trials": [
+    {
+      "critical_weight_multiplier": 1.25,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.8758678770354532,
+      "val_critical_recall": 0.8819192135071596,
+      "val_critical_precision": 0.9709411764705882,
+      "fit_seconds": 30.09,
+      "confusion_matrix": [
+        [
+          36646,
+          2731,
+          21
+        ],
+        [
+          1274,
+          10171,
+          473
+        ],
+        [
+          178,
+          2032,
+          16506
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.25,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8776123115170785,
+      "val_critical_recall": 0.8874759564009403,
+      "val_critical_precision": 0.9680615456346894,
+      "fit_seconds": 29.73,
+      "confusion_matrix": [
+        [
+          36665,
+          2701,
+          32
+        ],
+        [
+          1243,
+          10159,
+          516
+        ],
+        [
+          155,
+          1951,
+          16610
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.25,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.8782143257641248,
+      "val_critical_recall": 0.8872622355204104,
+      "val_critical_precision": 0.9687882853975848,
+      "fit_seconds": 34.46,
+      "confusion_matrix": [
+        [
+          36714,
+          2661,
+          23
+        ],
+        [
+          1249,
+          10157,
+          512
+        ],
+        [
+          159,
+          1951,
+          16606
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.25,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8800384321745782,
+      "val_critical_recall": 0.8927655481940585,
+      "val_critical_precision": 0.9648342764753436,
+      "fit_seconds": 34.13,
+      "confusion_matrix": [
+        [
+          36854,
+          2515,
+          29
+        ],
+        [
+          1273,
+          10065,
+          580
+        ],
+        [
+          149,
+          1858,
+          16709
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.5,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.8763896517435974,
+      "val_critical_recall": 0.8903611882880957,
+      "val_critical_precision": 0.9644634795693946,
+      "fit_seconds": 27.49,
+      "confusion_matrix": [
+        [
+          36646,
+          2723,
+          29
+        ],
+        [
+          1267,
+          10066,
+          585
+        ],
+        [
+          179,
+          1873,
+          16664
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.5,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8778828870758048,
+      "val_critical_recall": 0.8963988031630691,
+      "val_critical_precision": 0.9615979824611681,
+      "fit_seconds": 27.55,
+      "confusion_matrix": [
+        [
+          36672,
+          2691,
+          35
+        ],
+        [
+          1255,
+          10028,
+          635
+        ],
+        [
+          160,
+          1779,
+          16777
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.5,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.877916453162122,
+      "val_critical_recall": 0.8943684547980337,
+      "val_critical_precision": 0.9622880137970681,
+      "fit_seconds": 33.94,
+      "confusion_matrix": [
+        [
+          36689,
+          2676,
+          33
+        ],
+        [
+          1242,
+          10053,
+          623
+        ],
+        [
+          158,
+          1819,
+          16739
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 1.5,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8798584219511091,
+      "val_critical_recall": 0.8999251976918144,
+      "val_critical_precision": 0.9590047258441041,
+      "fit_seconds": 32.86,
+      "confusion_matrix": [
+        [
+          36828,
+          2533,
+          37
+        ],
+        [
+          1273,
+          9962,
+          683
+        ],
+        [
+          159,
+          1714,
+          16843
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 2.0,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.8752839514182135,
+      "val_critical_recall": 0.9041461850822825,
+      "val_critical_precision": 0.9506207516431661,
+      "fit_seconds": 28.02,
+      "confusion_matrix": [
+        [
+          36642,
+          2697,
+          59
+        ],
+        [
+          1285,
+          9813,
+          820
+        ],
+        [
+          173,
+          1621,
+          16922
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 2.0,
+      "parameters": {
+        "max_depth": 4,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8760759255057092,
+      "val_critical_recall": 0.9088480444539432,
+      "val_critical_precision": 0.9476851078054488,
+      "fit_seconds": 26.75,
+      "confusion_matrix": [
+        [
+          36639,
+          2699,
+          60
+        ],
+        [
+          1251,
+          9788,
+          879
+        ],
+        [
+          152,
+          1554,
+          17010
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 2.0,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.05
+      },
+      "val_macro_f1": 0.8773441298741691,
+      "val_critical_recall": 0.9068176960889078,
+      "val_critical_precision": 0.9502267510217793,
+      "fit_seconds": 35.63,
+      "confusion_matrix": [
+        [
+          36683,
+          2662,
+          53
+        ],
+        [
+          1234,
+          9848,
+          836
+        ],
+        [
+          152,
+          1592,
+          16972
+        ]
+      ]
+    },
+    {
+      "critical_weight_multiplier": 2.0,
+      "parameters": {
+        "max_depth": 6,
+        "learning_rate": 0.1
+      },
+      "val_macro_f1": 0.8773915683000387,
+      "val_critical_recall": 0.9087411840136781,
+      "val_critical_precision": 0.9465190049529746,
+      "fit_seconds": 34.6,
+      "confusion_matrix": [
+        [
+          36815,
+          2527,
+          56
+        ],
+        [
+          1276,
+          9737,
+          905
+        ],
+        [
+          150,
+          1558,
+          17008
+        ]
+      ]
+    }
+  ],
+  "test_set_evaluated": false
+}

@@ -1,0 +1,27 @@
+time,site,y,baseline_prediction,experiment_prediction,actual_class,baseline_class,experiment_class
+2026-09-03 21:00:00,BrentArea,0,2,1,Normal,Critical,Warning
+2026-01-12 21:00:00,DoggerBankA,1,2,1,Warning,Critical,Warning
+2026-01-16 04:00:00,DoggerBankA,1,2,1,Warning,Critical,Warning
+2026-09-10 12:00:00,DoggerBankA,1,2,1,Warning,Critical,Warning
+2026-09-30 15:00:00,EOWDC,1,2,1,Warning,Critical,Warning
+2026-10-09 03:00:00,EOWDC,0,2,0,Normal,Critical,Normal
+2026-10-22 05:00:00,EOWDC,1,2,1,Warning,Critical,Warning
+2026-03-04 18:00:00,FortiesArea,1,2,1,Warning,Critical,Warning
+2026-04-17 10:00:00,FortiesArea,1,2,1,Warning,Critical,Warning
+2026-04-17 11:00:00,FortiesArea,1,2,1,Warning,Critical,Warning
+2026-07-01 22:00:00,FortiesArea,1,2,1,Warning,Critical,Warning
+2026-09-03 20:00:00,FortiesArea,0,2,1,Normal,Critical,Warning
+2026-01-09 04:00:00,GreaterGabbard,1,2,1,Warning,Critical,Warning
+2026-01-13 15:00:00,GreaterGabbard,1,2,1,Warning,Critical,Warning
+2026-02-11 22:00:00,GreaterGabbard,0,2,0,Normal,Critical,Normal
+2026-08-31 04:00:00,GreaterGabbard,1,2,1,Warning,Critical,Warning
+2026-09-03 21:00:00,HornseaOne,0,2,1,Normal,Critical,Warning
+2026-09-19 13:00:00,HornseaOne,1,2,1,Warning,Critical,Warning
+2026-02-15 09:00:00,MorayEast,1,2,1,Warning,Critical,Warning
+2026-10-08 21:00:00,MorayEast,1,2,1,Warning,Critical,Warning
+2026-01-29 02:00:00,Teesside,1,2,1,Warning,Critical,Warning
+2026-01-29 03:00:00,Teesside,1,2,1,Warning,Critical,Warning
+2026-03-24 11:00:00,Teesside,1,2,1,Warning,Critical,Warning
+2026-04-04 12:00:00,Teesside,1,2,1,Warning,Critical,Warning
+2026-07-02 09:00:00,Teesside,1,2,1,Warning,Critical,Warning
+2026-10-23 05:00:00,Teesside,1,2,1,Warning,Critical,Warning
